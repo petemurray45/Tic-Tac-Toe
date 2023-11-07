@@ -3,7 +3,7 @@ body {
     height: 100vh;
     background-color: #fef6e4;
     font-family: sans-serif;
-
+    
 }
 
 .header {
@@ -16,4 +16,52 @@ body {
 
 .title {
     font-size: 3rem;
+}
+
+.mainBody {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.gameBoard {
+    position: relative;
+    background-color: wheat;
+    width: 500px;
+    height: 500px;
+    border-radius: 20px;
+}
+
+.spaces {
+    position: absolute;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    grid-gap: 1rem;
+    padding: 20px;
+}
+
+.space {
+    background-color: white;
+    font-size: 6rem;
+    border-radius: 20px;
+    transition: 0.1ms ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.show-winner {
+    display: none;
+    position: fixed;
+    z-index: 10;
+    top: 50%;
+    left: 50%;
+    padding: 2rem;
+    transform: translate(-50%, -50%);
 }
