@@ -55,29 +55,41 @@ const gameBoard = (() => {
 
         //  creates array of square children that gives ability to add selections based on player input through innerText and class changes
 
-        Array.from(spaces.children).forEach((space) => {
+        const gridArray = Array.from(spaces.children);
+
+       
+        
+
+       gridArray.forEach((space, i) => {
             space.addEventListener('click',() => {
                 if(game.gameWon === false){
-                    space.setAttribute('data', game.currentPlayer.marker);
                     board[i] = game.currentPlayer.marker;
+                    space.setAttribute('data', game.currentPlayer.marker);
                     game.checkWinner();
-
+                    
                     if(space.innerText === ''){
                         space.innerText = game.currentPlayer.marker;
-
+                        
                         if(game.currentPlayer === player1){
                             game.currentPlayer = player2;
-                            turnIndicator.innerText = 'Player 2`s turn!';
-
+                            turnIndicator.innerText = 'Player 2`s turn';
                         } else {
                             game.currentPlayer = player1;
-                            turnIndicator.innerText = 'Player 1`s turn!';
+                            turnIndicator.innerText = 'Player 1`s turn';
                         }
 
                     }
                 }
+
+                
+
+
+
+
             })
         })
+
+        
     
     })
 
@@ -92,7 +104,10 @@ const game = (() => {
     let currentPlayer = player1;
     let gameWon = false;
 
+    
+
     const winningCombinations = [
+
         [0, 1, 2],
         [3, 4, 5],
         [6, 7 ,8],
@@ -101,18 +116,22 @@ const game = (() => {
         [2, 5, 8],
         [0, 4, 8],
         [2, 4, 6]
+        
     ];
 
     function checkWinner(){
         winningCombinations.forEach((item, i) => {
             if(gameBoard.board[item[0]] === this.currentPlayer.marker && gameBoard.board[item[1]] === this.currentPlayer.marker && gameBoard.board[item[2]] === this.currentPlayer.marker){
-                console.log(this.currentPlayer.playerName + ' Wins!');
-                this.gameWon = true;
+                console.log(this.currentPlayer.name + ' Wins!');
+                gameWon = true;
             }
         })
     }
 
+    
+
     return {
+       
         checkWinner,
         currentPlayer,
         gameWon
