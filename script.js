@@ -13,7 +13,6 @@ const winnerName = document.getElementById('winnerName')
 
 // displays game winner on a pop up screen
 
-
 // closes winner screen
 
 const winScreenClose = () => {
@@ -57,40 +56,33 @@ const gameBoard = (() => {
 
         const gridArray = Array.from(spaces.children);
 
-       
-        
-
        gridArray.forEach((space, i) => {
             space.addEventListener('click',() => {
+
                 if(game.gameWon === false){
+
                     board[i] = game.currentPlayer.marker;
                     space.setAttribute('data', game.currentPlayer.marker);
-                    game.checkWinner();
+                    game.getWinner();
                     
+                
                     if(space.innerText === ''){
                         space.innerText = game.currentPlayer.marker;
                         
+
                         if(game.currentPlayer === player1){
                             game.currentPlayer = player2;
-                            turnIndicator.innerText = 'Player 2`s turn';
+                            turnIndicator.innerText = 'Player 2`s Turn';
+
                         } else {
                             game.currentPlayer = player1;
-                            turnIndicator.innerText = 'Player 1`s turn';
+                            turnIndicator.innerText = 'Player 1`s Turn';
                         }
 
                     }
                 }
-
-                
-
-
-
-
             })
         })
-
-        
-    
     })
 
     return { board };
@@ -103,11 +95,9 @@ const game = (() => {
 
     let currentPlayer = player1;
     let gameWon = false;
+    const gameSpace = document.querySelectorAll('.space');
 
-    
-
-    const winningCombinations = [
-
+    const winningCominations = [
         [0, 1, 2],
         [3, 4, 5],
         [6, 7 ,8],
@@ -115,30 +105,37 @@ const game = (() => {
         [1, 4, 7],
         [2, 5, 8],
         [0, 4, 8],
-        [2, 4, 6]
-        
+        [2, 4, 6],
     ];
 
-    function checkWinner(){
-        winningCombinations.forEach((item, i) => {
-            if(gameBoard.board[item[0]] === this.currentPlayer.marker && gameBoard.board[item[1]] === this.currentPlayer.marker && gameBoard.board[item[2]] === this.currentPlayer.marker){
-                console.log(this.currentPlayer.name + ' Wins!');
-                gameWon = true;
+    const _checkWinner = (combo, sign) => {
+        for(let i = 0; i < combo.length; i++){
+            if(gameSpace[combo[i]].innerText !== sign){
+                return false;
             }
-        })
+        }
+        return true;
     }
 
-    
+    function getWinner(){
+        for(let i = 0; i < winningCominations.length; i++){
+            if(_checkWinner(winningCominations[i], player1.marker)){
+                console.log('Player 1 Wins!');
+                return player1;
+            } else if (_checkWinner(winningCominations[i], player2.marker)){
+                console.log('Player 2 Wins!');
+                return player2;
+            }
+        }
+    }
 
     return {
        
-        checkWinner,
+        _checkWinner,
+        getWinner,
         currentPlayer,
         gameWon
     };
-
-
-
 
 })();
 
