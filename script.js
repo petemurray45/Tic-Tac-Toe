@@ -24,7 +24,7 @@ const winScreenClose = () => {
 
 overlay.onclick = winScreenClose;
 
-//dynamically creates the 3x3 grid for the game 
+//creates the 3x3 grid for the game 
 
 const gameBoard = (() => {
     const board = [];
@@ -36,7 +36,7 @@ const gameBoard = (() => {
         board.push('');
     }
 
-    board.forEach((item , i) => {
+    board.forEach(() => {
         const space = document.createElement('div');
         space.className = 'space';
         spaces.appendChild(space);
@@ -63,13 +63,13 @@ const gameBoard = (() => {
 
                     board[i] = game.currentPlayer.marker;
                     space.setAttribute('data', game.currentPlayer.marker);
-                    game.getWinner();
+                    game.checkWinner();
+                    console.log(board);
                     
                 
                     if(space.innerText === ''){
                         space.innerText = game.currentPlayer.marker;
                         
-
                         if(game.currentPlayer === player1){
                             game.currentPlayer = player2;
                             turnIndicator.innerText = 'Player 2`s Turn';
@@ -87,6 +87,8 @@ const gameBoard = (() => {
 
     return { board };
 
+    
+
 })();
 
 //  game state IIFE - decides current player and checks the grid inputs to see if the game has been won
@@ -95,44 +97,48 @@ const game = (() => {
 
     let currentPlayer = player1;
     let gameWon = false;
-    const gameSpace = document.querySelectorAll('.space');
+    
 
     const winningCominations = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7 ,8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6],
+         ,
     ];
 
-    const _checkWinner = (combo, sign) => {
-        for(let i = 0; i < combo.length; i++){
-            if(gameSpace[combo[i]].innerText !== sign){
-                return false;
-            }
-        }
-        return true;
-    }
+    
+    function checkWinner(){
+        let gameWon = false;
 
-    function getWinner(){
         for(let i = 0; i < winningCominations.length; i++){
-            if(_checkWinner(winningCominations[i], player1.marker)){
-                console.log('Player 1 Wins!');
-                return player1;
-            } else if (_checkWinner(winningCominations[i], player2.marker)){
-                console.log('Player 2 Wins!');
-                return player2;
+            const condition = winningCominations[i];
+            const cellA = gameBoard.board[condition[0]];
+            const cellB = gameBoard.board[condition[1]];
+            const cellC = gameBoard.board[condition[2]]; 
+
+
+            if( cellA == '' || cellB == '' || cellC == ''){
+                continue
             }
+
+            
+
+            if(cellA == cellB && cellB == cellC){
+                console.log(cellA)
+                console.log(cellB)
+                console.log(cellC)
+                gameWon = true;
+                break;
+            }
+
         }
+
+        if(gameWon){
+            turnIndicator.innerText = 'Game Won!';
+        }
+
     }
 
     return {
        
-        _checkWinner,
-        getWinner,
+        checkWinner,
         currentPlayer,
         gameWon
     };
